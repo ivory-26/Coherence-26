@@ -1,10 +1,21 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import Home from './components/home'
+import LoadingScreen from './components/LoadingScreen'
+import About from './components/about'
 
 const App = () => {
+  const [isLoading, setIsLoading] = useState(true);
+
   return (
-    <div className='text-5xl'>
-      Coherence 26
-    </div>
+    <>
+      <LoadingScreen 
+        isLoading={isLoading} 
+        onLoadingComplete={() => setIsLoading(false)}
+        minDuration={3000}
+      />
+      <Home />
+      <About />
+    </>
   )
 }
 
