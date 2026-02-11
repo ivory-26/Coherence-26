@@ -50,12 +50,6 @@ const Home = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isMenuOpen]);
 
-  const scrollToSection = (id) => {
-    setIsMenuOpen(false);
-    const element = document.getElementById(id);
-    if (element) element.scrollIntoView({ behavior: "smooth" });
-  };
-
   return (
     <div id="home" className="relative min-h-screen overflow-x-hidden">
       <Background />
