@@ -7,7 +7,7 @@ import Background from "./background";
 
 const Home = () => {
   const targetDate = new Date("March 28, 2026 12:00:00 GMT+0530").getTime();
-  
+
   const [timeRemaining, setTimeRemaining] = useState(calculateTimeRemaining());
   const [showScrollButton, setShowScrollButton] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -62,7 +62,7 @@ const Home = () => {
 
       {/* Navigation Bar - Glassmorphism Style */}
       <nav className="fixed top-0 w-full z-50 bg-purple-950/30 backdrop-blur-xl border-b border-purple-500/10 px-6 py-3 flex justify-between items-center">
-        <button 
+        <button
           onClick={() => setIsMenuOpen(true)}
           className="p-2 hover:bg-purple-500/20 rounded-lg text-purple-300/70 hover:text-purple-200 transition-all duration-300"
         >
@@ -70,17 +70,17 @@ const Home = () => {
         </button>
 
         <div className="flex space-x-4">
-          <a 
-            href="https://instagram.com" 
-            target="_blank" 
+          <a
+            href="https://instagram.com"
+            target="_blank"
             rel="noopener noreferrer"
             className="text-purple-300/70 hover:text-purple-200 hover:drop-shadow-[0_0_8px_rgba(167,139,250,0.5)] transition-all duration-300"
           >
             <FontAwesomeIcon icon={faInstagram} size="lg" />
           </a>
-          <a 
-            href="https://linkedin.com" 
-            target="_blank" 
+          <a
+            href="https://linkedin.com"
+            target="_blank"
             rel="noopener noreferrer"
             className="text-purple-300/70 hover:text-purple-200 hover:drop-shadow-[0_0_8px_rgba(167,139,250,0.5)] transition-all duration-300"
           >
@@ -93,16 +93,16 @@ const Home = () => {
       <AnimatePresence>
         {isMenuOpen && (
           <>
-            <motion.div 
-              initial={{ opacity: 0 }} 
-              animate={{ opacity: 1 }} 
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               className="fixed inset-0 bg-black/60 backdrop-blur-sm z-60"
             />
             <motion.div
               ref={menuRef}
-              initial={{ x: "-100%" }} 
-              animate={{ x: 0 }} 
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
               exit={{ x: "-100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
               className="fixed top-0 left-0 h-full w-72 z-70 p-6 shadow-2xl border-r border-purple-500/20"
@@ -114,8 +114,8 @@ const Home = () => {
                 <span className="font-bold text-transparent bg-clip-text bg-linear-to-r from-purple-300 to-blue-300">
                   Navigation
                 </span>
-                <button 
-                  onClick={() => setIsMenuOpen(false)} 
+                <button
+                  onClick={() => setIsMenuOpen(false)}
                   className="text-purple-300/70 hover:text-purple-200 transition-colors"
                 >
                   <FontAwesomeIcon icon={faTimes} />
@@ -177,7 +177,7 @@ const Home = () => {
                   Contact
                 </motion.a>
               </div>
-              
+
               {/* Decorative element in sidebar */}
               <div className="absolute bottom-8 left-6 right-6">
                 <div className="h-px bg-linear-to-r from-transparent via-purple-500/30 to-transparent" />
@@ -199,7 +199,7 @@ const Home = () => {
           className="space-y-6"
         >
           {/* Event Badge */}
-          <motion.span 
+          <motion.span
             className="inline-block px-5 py-2 text-xs font-medium tracking-[0.2em] rounded-full border"
             style={{
               background: "linear-gradient(135deg, rgba(139,92,246,0.2) 0%, rgba(59,130,246,0.1) 100%)",
@@ -220,7 +220,7 @@ const Home = () => {
           </motion.span>
 
           {/* Main Title */}
-          <motion.h1 
+          <motion.h1
             className="text-4xl md:text-6xl lg:text-8xl font-extrabold tracking-tight"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -230,7 +230,7 @@ const Home = () => {
               Beyond the
             </span>
             <br />
-            <span 
+            <span
               className="text-transparent bg-clip-text"
               style={{
                 backgroundImage: "linear-gradient(135deg, #c4b5fd 0%, #60a5fa 50%, #a78bfa 100%)",
@@ -242,7 +242,7 @@ const Home = () => {
           </motion.h1>
 
           {/* Tagline */}
-          <motion.p 
+          <motion.p
             className="text-lg md:text-2xl font-medium tracking-wide"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -281,20 +281,20 @@ const Home = () => {
           </motion.div> */}
 
           {/* Countdown Grid */}
-          <motion.div 
+          <motion.div
             className="grid grid-cols-4 gap-3 md:gap-4 mt-8 max-w-2xl mx-auto"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.7 }}
           >
             {Object.entries(timeRemaining).map(([label, value], i) => (
-              <motion.div 
-                key={label} 
+              <motion.div
+                key={label}
                 className="relative group"
                 whileHover={{ scale: 1.05 }}
                 transition={{ type: "spring", stiffness: 300 }}
               >
-                <div 
+                <div
                   className="p-4 md:p-5 rounded-xl border backdrop-blur-sm"
                   style={{
                     background: "linear-gradient(135deg, rgba(139,92,246,0.1) 0%, rgba(59,130,246,0.05) 100%)",
@@ -302,7 +302,7 @@ const Home = () => {
                     boxShadow: "0 0 20px rgba(139,92,246,0.1), inset 0 0 20px rgba(139,92,246,0.05)",
                   }}
                 >
-                  <div 
+                  <div
                     className="text-3xl md:text-5xl font-mono font-bold text-white"
                     style={{ textShadow: "0 0 20px rgba(167,139,250,0.5)" }}
                   >
@@ -324,7 +324,7 @@ const Home = () => {
           </motion.div>
 
           {/* CTA Text */}
-          <motion.p 
+          <motion.p
             className="text-purple-300/50 text-xs md:text-sm mt-6 tracking-widest"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -336,7 +336,7 @@ const Home = () => {
           {/* CTA Button */}
           <motion.button
             onClick={() => window.location.href = "/shortlisted-teams"}
-            className="mt-6 px-8 py-4 rounded-xl font-semibold text-white relative overflow-hidden group"
+            className="mt-6 px-8 py-4 rounded-xl font-semibold text-white relative overflow-hidden group cursor-pointer"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.9 }}
@@ -348,6 +348,37 @@ const Home = () => {
             }}
           >
             <span className="relative z-10">Explore Shortlisted Teams</span>
+            {/* Shimmer effect */}
+            <motion.div
+              className="absolute inset-0 opacity-0 group-hover:opacity-100"
+              style={{
+                background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)",
+              }}
+              animate={{
+                x: ["-100%", "100%"],
+              }}
+              transition={{
+                duration: 1.5,
+                repeat: Infinity,
+                repeatDelay: 0.5,
+              }}
+            />
+          </motion.button>
+          <br />
+          <motion.button
+            onClick={() => window.location.href = "/networking"}
+            className="mt-6 px-8 py-4 rounded-xl font-semibold text-white relative overflow-hidden group cursor-pointer"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.9 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.98 }}
+            style={{
+              background: "linear-gradient(135deg, rgba(139,92,246,0.8) 0%, rgba(99,102,241,0.8) 50%, rgba(59,130,246,0.8) 100%)",
+              boxShadow: "0 0 30px rgba(139,92,246,0.4), inset 0 0 20px rgba(255,255,255,0.1)",
+            }}
+          >
+            <span className="relative z-10">Connect with Participants</span>
             {/* Shimmer effect */}
             <motion.div
               className="absolute inset-0 opacity-0 group-hover:opacity-100"
@@ -382,7 +413,7 @@ const Home = () => {
               boxShadow: "0 0 30px rgba(139,92,246,0.3)",
               backdropFilter: "blur(10px)",
             }}
-            whileHover={{ 
+            whileHover={{
               scale: 1.1,
               boxShadow: "0 0 40px rgba(139,92,246,0.5)",
             }}

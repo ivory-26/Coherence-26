@@ -4,6 +4,7 @@ import Home from "./components/home";
 import LoadingScreen from "./components/LoadingScreen";
 import About from "./components/about";
 import ShortlistedTeams from "./pages/ShortlistedTeams";
+import Networking from "./pages/Networking";
 
 // Landing page — home + about sections
 const LandingPage = () => {
@@ -28,6 +29,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/shortlisted-teams" element={<ShortlistedTeams />} />
+        <Route path="/networking" element={<Networking />} />
       </Routes>
     </BrowserRouter>
   );

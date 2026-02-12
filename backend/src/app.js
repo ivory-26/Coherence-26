@@ -3,6 +3,8 @@ import cors from "cors";
 import morgan from "morgan";
 import { notFound, errorHandler } from "./middlewares/error.middleware.js";
 import teamRouter from "./routes/team.routes.js";
+import uploadRoute from "./routes/img_upload.route.js";
+import participantRouter from "./routes/participant.routes.js";
 
 const app = express();
 
@@ -16,6 +18,8 @@ app.get("/api/health", (_req, res) => {
 });
 
 app.use("/api/teams", teamRouter);
+app.use("/api/participants", participantRouter);
+app.use("/api/upload", uploadRoute);
 
 app.use(notFound);
 app.use(errorHandler);
