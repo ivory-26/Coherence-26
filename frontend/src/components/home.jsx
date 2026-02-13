@@ -281,9 +281,6 @@ const Home = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.7 }}
           >
-            {Object.entries(timeRemaining).map(([label, value]) => (
-              <motion.div 
-                key={label} 
             {Object.entries(timeRemaining).map(([label, value], i) => (
               <motion.div
                 key={label}
@@ -293,8 +290,6 @@ const Home = () => {
               >
                 <div 
                   className="min-w-[70px] md:min-w-[100px] p-4 md:p-5 rounded-xl border backdrop-blur-sm flex flex-col items-center justify-center text-center"
-                <div
-                  className="p-4 md:p-5 rounded-xl border backdrop-blur-sm"
                   style={{
                     background: "linear-gradient(135deg, rgba(139,92,246,0.1) 0%, rgba(59,130,246,0.05) 100%)",
                     borderColor: "rgba(139,92,246,0.2)",
@@ -303,8 +298,6 @@ const Home = () => {
                 >
                   <div 
                     className="text-3xl md:text-5xl font-mono font-bold text-white leading-none"
-                  <div
-                    className="text-3xl md:text-5xl font-mono font-bold text-white"
                     style={{ textShadow: "0 0 20px rgba(167,139,250,0.5)" }}
                   >
                     {String(value).padStart(2, '0')}

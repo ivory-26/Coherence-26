@@ -24,11 +24,12 @@ const LandingPage = () => {
       />
       <Home />
       <About />
-      <FAQs />
-      <Contact />
       <Domains />
       <GeneralGuidelines />
       <PrizeSection />
+      <FAQs />
+      <Contact />
+     
     </>
   );
 };
