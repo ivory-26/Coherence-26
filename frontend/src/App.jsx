@@ -10,6 +10,8 @@ import GeneralGuidelines from "./components/GeneralGuildelines.jsx";
 import PrizeSection from "./components/PrizeSection.jsx";
 import ShortlistedTeams from "./pages/ShortlistedTeams";
 import Networking from "./pages/Networking";
+import CommitAnalyzer from "./pages/CommitAnalyzer";
+import CommitReport from "./pages/CommitReport";
 
 // Landing page — home + about sections
 const LandingPage = () => {
@@ -41,6 +43,8 @@ const App = () => {
         <Route path="/" element={<LandingPage />} />
         <Route path="/shortlisted-teams" element={<ShortlistedTeams />} />
         <Route path="/networking" element={<Networking />} />
+        <Route path="/commit-analyzer" element={<CommitAnalyzer />} />
+        <Route path="/commit-analyzer/report/:team_name" element={<CommitReport />} />
       </Routes>
     </BrowserRouter>
   );
