@@ -4,9 +4,10 @@ import { faAngleUp, faBars, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { faInstagram, faLinkedin } from "@fortawesome/free-brands-svg-icons";
 import { motion, AnimatePresence } from "framer-motion";
 import Background from "./background";
+import logo from '../assets/coherence-logo.png';
 
 const Home = () => {
-  const targetDate = new Date("March 28, 2026 12:00:00 GMT+0530").getTime();
+  const targetDate = new Date("March 6, 2026 12:00:00 GMT+0530").getTime();
 
   const [timeRemaining, setTimeRemaining] = useState(calculateTimeRemaining());
   const [showScrollButton, setShowScrollButton] = useState(false);
@@ -214,8 +215,8 @@ const Home = () => {
           </motion.span>
 
           {/* Main Title */}
-          <motion.h1
-            className="text-4xl md:text-6xl lg:text-8xl font-extrabold tracking-tight"
+          <motion.p
+            className="text-2xl md:text-3xl lg:text-5xl font-extrabold tracking-tight" // made smaller
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.8 }}
@@ -233,14 +234,24 @@ const Home = () => {
             >
               Ascension
             </span>
-          </motion.h1>
+          </motion.p>
+
+          {/* Coherence Logo */}
+          <motion.img
+            src={logo} // make sure this path points to your logo
+            alt="Coherence Logo"
+            className="w-5/6 mx-auto"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.8 }}
+          />
 
           {/* Tagline */}
           <motion.p
-            className="text-lg md:text-2xl font-medium tracking-wide"
+            className="text-lg md:text-xl font-medium tracking-wide"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.4 }}
+            transition={{ delay: 0.5 }}
             style={{
               background: "linear-gradient(90deg, #a78bfa, #60a5fa, #a78bfa)",
               backgroundSize: "200% 100%",
@@ -251,35 +262,12 @@ const Home = () => {
             Break Boundaries. Build Beyond.
           </motion.p>
 
-          {/* Inspirational Quote */}
-          {/* <motion.div 
-            className="py-6"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6 }}
-          >
-            <p className="text-purple-300/40 text-sm italic">The future is not ahead.</p>
-            <p className="text-white text-xl md:text-2xl font-semibold mt-2">
-              The future is{" "}
-              <span 
-                className="text-transparent bg-clip-text"
-                style={{
-                  backgroundImage: "linear-gradient(90deg, #a78bfa, #60a5fa)",
-                  filter: "drop-shadow(0 0 10px rgba(167,139,250,0.8))",
-                }}
-              >
-                beyond
-              </span>
-              .
-            </p>
-          </motion.div> */}
-
           {/* Countdown Grid */}
           <motion.div
-            className="grid grid-cols-4 gap-3 md:gap-4 mt-8 max-w-2xl mx-auto"
+            className="grid grid-cols-4 gap-3 md:gap-4 mt-3 max-w-2xl mx-auto"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.7 }}
+            transition={{ delay: 0.6 }}
           >
             {Object.entries(timeRemaining).map(([label, value], i) => (
               <motion.div
@@ -288,7 +276,7 @@ const Home = () => {
                 whileHover={{ scale: 1.05 }}
                 transition={{ type: "spring", stiffness: 300 }}
               >
-                <div 
+                <div
                   className="min-w-[70px] md:min-w-[100px] p-4 md:p-5 rounded-xl border backdrop-blur-sm flex flex-col items-center justify-center text-center"
                   style={{
                     background: "linear-gradient(135deg, rgba(139,92,246,0.1) 0%, rgba(59,130,246,0.05) 100%)",
@@ -296,7 +284,7 @@ const Home = () => {
                     boxShadow: "0 0 20px rgba(139,92,246,0.1), inset 0 0 20px rgba(139,92,246,0.05)",
                   }}
                 >
-                  <div 
+                  <div
                     className="text-3xl md:text-5xl font-mono font-bold text-white leading-none"
                     style={{ textShadow: "0 0 20px rgba(167,139,250,0.5)" }}
                   >
@@ -306,7 +294,6 @@ const Home = () => {
                     {label}
                   </div>
                 </div>
-                {/* Glow effect on hover */}
                 <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
                   style={{
                     background: "radial-gradient(circle at center, rgba(139,92,246,0.3) 0%, transparent 70%)",
@@ -317,23 +304,13 @@ const Home = () => {
             ))}
           </motion.div>
 
-          {/* CTA Text */}
-          <motion.p
-            className="text-purple-300/50 text-xs md:text-sm mt-6 tracking-widest"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+          {/* Register Now Button */}
+          <motion.button
+            onClick={() => window.location.href = "/register"}
+            className="mt-2 px-8 py-4 rounded-xl font-semibold text-white relative overflow-hidden group cursor-pointer"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8 }}
-          >
-            SHAPE WHAT COMES NEXT ✨
-          </motion.p>
-
-          {/* CTA Button */}
-          <motion.button
-            onClick={() => window.location.href = "/shortlisted-teams"}
-            className="mt-6 px-8 py-4 rounded-xl font-semibold text-white relative overflow-hidden group cursor-pointer"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.9 }}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.98 }}
             style={{
@@ -341,39 +318,7 @@ const Home = () => {
               boxShadow: "0 0 30px rgba(139,92,246,0.4), inset 0 0 20px rgba(255,255,255,0.1)",
             }}
           >
-            <span className="relative z-10">Explore Shortlisted Teams</span>
-            {/* Shimmer effect */}
-            <motion.div
-              className="absolute inset-0 opacity-0 group-hover:opacity-100"
-              style={{
-                background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)",
-              }}
-              animate={{
-                x: ["-100%", "100%"],
-              }}
-              transition={{
-                duration: 1.5,
-                repeat: Infinity,
-                repeatDelay: 0.5,
-              }}
-            />
-          </motion.button>
-          <br />
-          <motion.button
-            onClick={() => window.location.href = "/networking"}
-            className="mt-6 px-8 py-4 rounded-xl font-semibold text-white relative overflow-hidden group cursor-pointer"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.9 }}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.98 }}
-            style={{
-              background: "linear-gradient(135deg, rgba(139,92,246,0.8) 0%, rgba(99,102,241,0.8) 50%, rgba(59,130,246,0.8) 100%)",
-              boxShadow: "0 0 30px rgba(139,92,246,0.4), inset 0 0 20px rgba(255,255,255,0.1)",
-            }}
-          >
-            <span className="relative z-10">Connect with Participants</span>
-            {/* Shimmer effect */}
+            <span className="relative z-10">Register Now !</span>
             <motion.div
               className="absolute inset-0 opacity-0 group-hover:opacity-100"
               style={{
@@ -391,6 +336,7 @@ const Home = () => {
           </motion.button>
         </motion.div>
       </div>
+
 
       {/* Scroll to Top - Mystical Style */}
       <AnimatePresence>

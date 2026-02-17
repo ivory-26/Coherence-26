@@ -1,51 +1,61 @@
-// Timeline — vertical event timeline with alternating sticky cards
-// connected by a scroll-driven glowing beam. Desktop uses 150 vh
-// sticky-rail sections; mobile collapses to a single flowing column.
-
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
-import { FileText, Lightbulb, Rocket, Upload, Trophy } from 'lucide-react';
+import { FileText, Users, Calendar, Lightbulb, Rocket, Trophy } from 'lucide-react';
 
-// Hackathon milestones shown on the timeline
+// Updated hackathon milestones
 const timelineData = [
   {
     id: 1,
-    date: 'February 10, 2026',
-    title: 'Registration Begins',
-    description: 'Start your journey by registering for the event. Gather your team and prepare for the challenge.',
+    date: 'February 18, 2026',
+    title: 'Registration Opens',
+    description: 'Participants register individually or in teams. Get ready to innovate and collaborate.',
     icon: FileText,
   },
   {
     id: 2,
-    date: 'March 20, 2026',
-    title: 'Workshops & Mentoring',
-    description: 'Join our exclusive workshops to sharpen your skills and get guidance from industry experts.',
-    icon: Lightbulb,
+    date: 'February 25, 2026',
+    title: 'Team Shortlisting',
+    description: 'Selected teams are notified. Prepare for mentoring and idea finalization.',
+    icon: Users,
   },
   {
     id: 3,
-    date: 'March 28, 2026',
-    title: 'Hackathon Kick-off',
-    description: 'The coding begins! Unleash your creativity and build innovative solutions within the timeframe.',
+    date: 'March 6, 2026',
+    title: 'Hackathon Kick-off & Event Day',
+    description: 'The main coding marathon begins. Teams implement, test, and polish their projects.',
     icon: Rocket,
   },
   {
     id: 4,
-    date: 'March 29, 2026',
-    title: 'Submission & Judging',
-    description: 'Submit your projects for evaluation. Our judges will review the submissions based on creativity and impact.',
-    icon: Upload,
+    date: 'March 6, 2026 - 3 PM',
+    title: 'Mentoring Round 1',
+    description: 'Teams get guidance from mentors to refine their ideas and project approach.',
+    icon: Lightbulb,
   },
   {
     id: 5,
-    date: 'March 30, 2026',
-    title: 'Winners Announcement',
-    description: 'Celebration of the best projects. Prizes and recognition for the top performing teams.',
+    date: 'March 7, 2026 - 8 AM',
+    title: 'Mentoring Round 2',
+    description: 'Mentors provide last-minute tips and help solve blockers for teams.',
+    icon: Lightbulb,
+  },
+  {
+    id: 6,
+    date: 'March 9, 2026 - 12.30 PM',
+    title: 'Final Round',
+    description: 'Teams submit their final projects for judging. Creativity and functionality are evaluated.',
+    icon: Calendar,
+  },
+  {
+    id: 7,
+    date: 'March 10, 2026',
+    title: 'Results & Awards',
+    description: 'Winners are announced! Celebrate the top projects and innovative solutions.',
     icon: Trophy,
   },
 ];
 
-// Glass bubble node on the track — glows when active (centred in viewport)
+// Glass node
 const GlassNode = ({ isActive, Icon }) => (
   <div className="timeline-node-wrapper">
     <div className={`timeline-glass-node ${isActive ? 'timeline-glass-node--active' : ''}`}>
@@ -56,19 +66,16 @@ const GlassNode = ({ isActive, Icon }) => (
   </div>
 );
 
-// Single timeline row — alternates card left/right on desktop.
-// The 150 vh section gives the sticky card room to pin in the viewport.
+// Timeline row
 const TimelineRow = ({ data, index }) => {
   const isEven = index % 2 === 0;
   const rowRef = useRef(null);
 
-  // Track row's scroll progress (0 = entering, 1 = exiting viewport)
   const { scrollYProgress } = useScroll({
     target: rowRef,
     offset: ['start end', 'end start'],
   });
 
-  // Active when row is roughly centred in viewport (35%–65%)
   const [isActive, setIsActive] = React.useState(false);
   useMotionValueEvent(scrollYProgress, 'change', (v) => {
     setIsActive(v >= 0.35 && v <= 0.65);
@@ -77,15 +84,10 @@ const TimelineRow = ({ data, index }) => {
   return (
     <div ref={rowRef} className="timeline-section">
       <div className={`timeline-row ${isEven ? 'timeline-row--even' : 'timeline-row--odd'}`}>
-        {/* Spacer — fills opposite side on desktop */}
         <div className="timeline-spacer" />
-
-        {/* Sticky node on the vertical track */}
         <div className="timeline-node-col">
           <GlassNode isActive={isActive} Icon={data.icon} />
         </div>
-
-        {/* Sticky card — pins to viewport centre while section scrolls */}
         <div className={`timeline-card-wrapper ${isEven ? 'md:text-right' : 'md:text-left'}`}>
           <motion.div
             initial={{ opacity: 0, scale: 0.1 }}
@@ -104,21 +106,18 @@ const TimelineRow = ({ data, index }) => {
   );
 };
 
-// Main timeline — header, beam track, and all rows
+// Main timeline
 const Timeline = () => {
   const containerRef = useRef(null);
-
-  // Beam position/height in px + scroll fraction where beam stops growing
   const [beamMetrics, setBeamMetrics] = React.useState({ top: 0, height: 0, endProgress: 0.8 });
 
-  // Measure beam span using offsetTop (immune to sticky-position quirks)
   React.useEffect(() => {
     const updateMetrics = () => {
       if (!containerRef.current) return;
       const sections = containerRef.current.querySelectorAll('.timeline-section');
       if (sections.length < 2) return;
 
-      const nodeRadius = 28; // half of 3.5rem node
+      const nodeRadius = 28;
       const firstSection = sections[0];
       const lastSection = sections[sections.length - 1];
       const isDesktop = window.innerWidth >= 768;
@@ -126,11 +125,9 @@ const Timeline = () => {
       let firstY, lastY;
 
       if (isDesktop) {
-        // Node sticky-centres in section — beam ends at ~75% of last section
         firstY = firstSection.offsetTop;
         lastY = lastSection.offsetTop + (lastSection.offsetHeight - lastSection.offsetHeight * 0.25);
       } else {
-        // Mobile: node at top of section, offset by radius
         firstY = firstSection.offsetTop + nodeRadius;
         lastY = lastSection.offsetTop + nodeRadius;
       }
@@ -148,20 +145,18 @@ const Timeline = () => {
 
     updateMetrics();
     window.addEventListener('resize', updateMetrics);
-    const timer = setTimeout(updateMetrics, 500); // re-measure after fonts/images load
+    const timer = setTimeout(updateMetrics, 500);
     return () => {
       window.removeEventListener('resize', updateMetrics);
       clearTimeout(timer);
     };
   }, []);
 
-  // Scroll progress for the container (0–1)
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start center', 'end center'],
   });
 
-  // Beam grows from 0 to full track height, then clamps
   const beamHeight = useTransform(
     scrollYProgress,
     [0, beamMetrics.endProgress, 1],
@@ -169,10 +164,7 @@ const Timeline = () => {
   );
 
   return (
-    <div
-      className="container mx-auto w-full py-23 px-4 bg-transparent relative"
-    >
-      {/* Header */}
+    <div className="container mx-auto w-full py-24 px-4 bg-transparent relative">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -192,23 +184,13 @@ const Timeline = () => {
           <div className="h-px w-16 bg-linear-to-l from-transparent to-purple-500/50" />
         </div>
         <p className="max-w-xl mx-auto text-gray-300 text-lg leading-relaxed">
-          Follow the journey from registration to victory.
+          Follow the journey from registration to results.
         </p>
       </motion.div>
 
-      {/* Timeline body */}
       <div ref={containerRef} className="relative">
-        {/* Faint track line */}
-        <div 
-          className="timeline-track" 
-          style={{ top: beamMetrics.top, height: beamMetrics.height }} 
-        />
-        {/* Glowing beam — height grows with scroll */}
-        <motion.div 
-          className="timeline-beam" 
-          style={{ top: beamMetrics.top, height: beamHeight }} 
-        />
-
+        <div className="timeline-track" style={{ top: beamMetrics.top, height: beamMetrics.height }} />
+        <motion.div className="timeline-beam" style={{ top: beamMetrics.top, height: beamHeight }} />
         {timelineData.map((item, index) => (
           <TimelineRow key={item.id} data={item} index={index} />
         ))}

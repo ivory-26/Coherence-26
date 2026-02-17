@@ -159,8 +159,8 @@
   border-radius: 9999px;
   background: radial-gradient(
     circle at 30% 30%,
-    rgba(59, 130, 246, 0.25) 0%,
-    rgba(20, 60, 180, 0.1) 40%,
+    rgba(143, 59, 246, 0.25) 0%,
+    rgba(100, 20, 180, 0.1) 40%,
     rgba(0, 0, 0, 0.7) 70%,
     rgba(0, 0, 0, 0.9) 100%
   );
