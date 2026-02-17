@@ -1,77 +1,70 @@
+// Background — fixed full-screen decorative layer with stars, fireflies,
+// nebula clouds, orbital rings, and a mouse-following shooting star.
+
 import React, { useMemo, useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
 
 const Background = () => {
-  // ----------------------------------------------------------------------
-  // 1. Mouse & Physics State (Pure React, no Framer Motion)
-  // ----------------------------------------------------------------------
-  const mouseRef = useRef({ x: 0, y: 0 });      // Target (Mouse) position
-  const posRef = useRef({ x: 0, y: 0 });        // Current (Follower) position
-  const velocityRef = useRef({ x: 0, y: 0 });   // Current Velocity
-  const rafId = useRef(null);                   // Request Animation Frame ID
+  // Refs used in rAF loop instead of state to avoid re-renders
+  const mouseRef = useRef({ x: 0, y: 0 });      // Mouse position (center-relative)
+  const posRef = useRef({ x: 0, y: 0 });         // Interpolated follower position
+  const velocityRef = useRef({ x: 0, y: 0 });    // Per-frame velocity
+  const rafId = useRef(null);                     // rAF handle for cleanup
 
-  // Refs for direct DOM manipulation (Performance optimization)
+  // DOM refs for direct style updates (no React reconciliation)
   const starContainerRef = useRef(null);
   const starTailRef = useRef(null);
 
-  // Initialize positions to center
+  // Reset follower to screen center on mount
   useEffect(() => {
     posRef.current = { x: 0, y: 0 };
   }, []);
 
-  // Track mouse movement
+  // Track mouse position relative to viewport center
   useEffect(() => {
     const handleMouseMove = (e) => {
-        // Calculate coordinates relative to the center of the screen
-        // x: positive = right, negative = left
-        // y: positive = down, negative = up
         const x = e.clientX - window.innerWidth / 2;
         const y = e.clientY - window.innerHeight / 2;
         mouseRef.current = { x, y };
     };
 
     window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    
+    return () => {
+        window.removeEventListener('mousemove', handleMouseMove);
+    };
   }, []);
 
-  // Animation Loop
+  // rAF loop — lerps the star toward the cursor and adjusts tail visuals by speed
   useEffect(() => {
     const loop = () => {
-        // Physics Constants
-        const ease = 0.08; // smooth following easing
+        const ease = 0.08; // Lerp factor (lower = smoother lag)
 
-        // 1. Calculate distance from current pos to target (mouse)
         const dx = mouseRef.current.x - posRef.current.x;
         const dy = mouseRef.current.y - posRef.current.y;
 
-        // 2. Update current position (Lerp)
+        // Move toward mouse
         posRef.current.x += dx * ease;
         posRef.current.y += dy * ease;
 
-        // 3. Update velocity
         velocityRef.current = { x: dx * ease, y: dy * ease };
 
-        // 4. Calculate Rotation & Speed
         const vx = velocityRef.current.x;
         const vy = velocityRef.current.y;
         const speed = Math.sqrt(vx * vx + vy * vy);
         
-        // Only rotate if moving significantly to avoid jitter at rest
+        // Rotate to face movement direction; skip when nearly still to avoid jitter
         let rotation = 0;
         if (speed > 0.1) {
             rotation = Math.atan2(vy, vx) * (180 / Math.PI);
         }
 
-        // 5. Visual Effects based on Speed
-        // Scale tail from 0.5 to 1.5 based on speed (0 to 50px/frame)
+        // Tail stretches (0.5×–1.8×) and fades in based on speed
         const scaleX = Math.min(Math.max(0.5 + speed / 40, 0.5), 1.8);
-        
-        // Opacity: fade out when stationary
         const opacity = Math.min(Math.max(speed / 3, 0), 1);
 
-        // 6. Apply to DOM
+        // Apply transforms directly to DOM
         if (starContainerRef.current) {
-            // Apply translation and rotation to the container
             starContainerRef.current.style.transform = 
                 `translate3d(${posRef.current.x}px, ${posRef.current.y}px, 0) rotate(${rotation}deg)`;
         }
@@ -90,9 +83,9 @@ const Background = () => {
     };
   }, []);
 
-  // ----------------------------------------------------------------------
-  // Background Elements (Stars, Fireflies, etc.)
-  // ----------------------------------------------------------------------
+  // Memoised random arrays — computed once, stable across re-renders
+
+  // 100 twinkling stars with varied sizes
   const stars = useMemo(() => Array.from({ length: 100 }, (_, i) => ({
     id: i,
     x: Math.random() * 100,
@@ -102,6 +95,7 @@ const Background = () => {
     delay: Math.random() * 5,
   })), []);
 
+  // 15 drifting fireflies (blue/purple)
   const fireflies = useMemo(() => Array.from({ length: 15 }, (_, i) => ({
     id: i,
     x: Math.random() * 100,
@@ -112,6 +106,7 @@ const Background = () => {
     color: Math.random() > 0.5 ? "#60a5fa" : "#a78bfa",
   })), []);
 
+  // 15 ambient rising particles
   const particles = useMemo(() => Array.from({ length: 15 }, (_, i) => ({
     id: i,
     x: Math.random() * 100,
@@ -122,7 +117,7 @@ const Background = () => {
 
   return (
     <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-      {/* Deep space gradient background */}
+      {/* Deep-space gradient background */}
       <div 
         className="absolute inset-0"
         style={{
@@ -130,7 +125,7 @@ const Background = () => {
         }}
       />
 
-      {/* Inline CSS Keyframes */}
+      {/* Tail sparkle keyframe */}
       <style>{`
           @keyframes tail-sparkle {
               0% { transform: translateX(0); opacity: 1; }
@@ -138,45 +133,38 @@ const Background = () => {
           }
       `}</style>
       
-      {/* -------------------- SHOOTING STAR (New Implementation) -------------------- */}
+      {/* Shooting star — positioned at viewport center, moved via JS translate3d */}
       <div
           ref={starContainerRef}
           className="absolute top-1/2 left-1/2 z-50 pointer-events-none will-change-transform"
           style={{
               width: 0, 
               height: 0,
-              // transform set by JS loop
           }}
       >
-          {/* 
-             Pivot point wrapper.
-             The container is at TOP: 50%, LEFT: 50%.
-             We translate it by (mouse - center).
-             Then we effectively place the star at (0,0) inside the container.
-          */}
+          {/* Zero-size anchor for the star head + tail */}
           <div className="relative flex items-center justify-end w-0 h-0">
               
-              {/* THE STAR HEAD */}
+              {/* Glowing cyan star head */}
               <div className="relative w-3 h-3 bg-cyan-300 rounded-full shadow-[0_0_10px_rgba(34,211,238,0.8)] z-20 -translate-y-1/2 -translate-x-1/2">
                   <div className="absolute inset-0 bg-white blur-[1px] rounded-full" />
               </div>
 
-              {/* DYNAMIC TAIL SECTION */}
+              {/* Comet tail — stretches/fades by speed (core streak + outer glow + sparkle) */}
               <div 
                   ref={starTailRef}
                   className="absolute right-1 h-8 flex items-center justify-end origin-right -translate-y-1/2"
                   style={{ 
-                      width: '4rem', // w-16
-                      // Opacity/Scale set by JS loop
+                      width: '4rem',
                   }}
               >
-                  {/* Core Streak */}
+                  {/* Core streak */}
                   <div className="w-full h-0.5 bg-linear-to-l from-cyan-300 via-blue-500 to-transparent blur-[1px]" />
                   
-                  {/* Outer Glow */}
+                  {/* Outer glow */}
                   <div className="absolute right-0 w-3/4 h-4 bg-linear-to-l from-blue-500/50 via-purple-500/30 to-transparent blur-[6px] rounded-l-full" />
                   
-                  {/* Floating Sparkles */}
+                  {/* Looping sparkle particle */}
                   <div
                       className="absolute right-4 w-1 h-1 bg-cyan-200 rounded-full blur-[0.5px]"
                       style={{ animation: 'tail-sparkle 0.5s infinite linear' }}
@@ -185,9 +173,7 @@ const Background = () => {
           </div>
       </div>
 
-      {/* --- EXISTING BACKGROUND ELEMENTS --- */}
-      
-      {/* Animated nebula clouds */}
+      {/* Nebula clouds — large blurred gradients that drift slowly */}
       <motion.div 
         className="absolute top-0 -left-1/4 w-200 h-200 rounded-full opacity-30"
         style={{
@@ -207,7 +193,7 @@ const Background = () => {
         transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
       />
 
-      {/* Stars layer */}
+      {/* Twinkling stars — opacity pulses at random phases */}
       <div className="absolute inset-0">
         {stars.map((star) => (
           <motion.div
@@ -220,7 +206,7 @@ const Background = () => {
         ))}
       </div>
 
-      {/* Fireflies */}
+      {/* Fireflies — glowing dots drifting in small organic loops */}
       <div className="absolute inset-0">
         {fireflies.map((particle) => (
           <motion.div
@@ -237,7 +223,7 @@ const Background = () => {
         ))}
       </div>
 
-      {/* Mystical orbital rings */}
+      {/* Orbital rings — two concentric circles rotating in opposite directions */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-225 h-225 opacity-10">
         <motion.div 
           className="absolute inset-0 border border-purple-500/40 rounded-full"
@@ -251,7 +237,7 @@ const Background = () => {
         />
       </div>
 
-      {/* Vignette */}
+      {/* Vignette — inset shadow darkening viewport edges */}
       <div className="absolute inset-0 shadow-[inset_0_0_200px_rgba(0,0,0,0.8)]" />
     </div>
   )
