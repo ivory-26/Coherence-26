@@ -5,6 +5,7 @@ import { faInstagram, faLinkedin } from "@fortawesome/free-brands-svg-icons";
 import { motion, AnimatePresence } from "framer-motion";
 import Background from "./background";
 import logo from '../assets/coherence-logo.png';
+import HologramSphere from "./sphere";
 
 const Home = () => {
   const targetDate = new Date("March 6, 2026 12:00:00 GMT+0530").getTime();
@@ -54,6 +55,7 @@ const Home = () => {
   return (
     <div id="home" className="relative min-h-screen overflow-x-hidden">
       <Background />
+      {/* <HologramSphere /> */}
 
       {/* Navigation Bar - Glassmorphism Style */}
       <nav className="fixed top-0 w-full z-50 bg-purple-950/30 backdrop-blur-xl border-b border-purple-500/10 px-6 py-3 flex justify-between items-center">

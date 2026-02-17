@@ -12,7 +12,7 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 import { Link } from "react-router-dom";
 import Background from "../components/background";
-import axios from "axios";
+import apiClient from "../api/client";
 
 const Networking = () => {
     const [participants, setParticipants] = useState([]);
@@ -39,8 +39,8 @@ const Networking = () => {
 
     const fetchParticipants = async () => {
         try {
-            const res = await axios.get("/api/participants");
-            setParticipants(res.data.participants);
+            const res = await apiClient.get("/api/participants");
+            setParticipants(res.data?.participants || []);
         } catch (error) {
             console.log(error);
         }
@@ -94,7 +94,7 @@ const Networking = () => {
             const imageData = new FormData();
             imageData.append("image", image);
 
-            const uploadRes = await axios.post(
+            const uploadRes = await apiClient.post(
                 "/api/upload",
                 imageData
             );
@@ -102,7 +102,7 @@ const Networking = () => {
             const imageUrl = uploadRes.data.imageUrl;
 
             // 2️⃣ Save participant
-            const res = await axios.post("/api/participants", {
+            const res = await apiClient.post("/api/participants", {
                 ...form,
                 imageUrl,
             });

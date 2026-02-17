@@ -4,6 +4,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faArrowLeft, faUsers } from "@fortawesome/free-solid-svg-icons";
 import Background from "../components/background";
 
+import apiClient from "../api/client";
+
 const ShortlistedTeams = () => {
   const [teams, setTeams] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -21,8 +23,8 @@ const ShortlistedTeams = () => {
   useEffect(() => {
     const fetchTeams = async () => {
       try {
-        const res = await fetch("/api/teams/shortlisted");
-        const data = await res.json();
+        const res = await apiClient.get("https://coherence-26-is6m.onrender.com/api/teams/shortlisted");
+        const data = res.data;
 
         if (!data.success) throw new Error(data.message || "Failed to fetch teams");
         setTeams(data.teams);
