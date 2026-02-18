@@ -5,7 +5,7 @@ import LoadingScreen from "./components/LoadingScreen";
 import About from "./components/about";
 import Contact from "./components/contact";
 import FAQs from "./components/faqs";
-import Domains from "./components/Domains.jsx";
+import Tracks from "./components/Tracks.jsx";
 import GeneralGuidelines from "./components/GeneralGuildelines.jsx";
 import PrizeSection from "./components/PrizeSection.jsx";
 import ShortlistedTeams from "./pages/ShortlistedTeams";
@@ -28,10 +28,10 @@ const LandingPage = () => {
       /> */}
       <Home />
       <About />
-      <Domains />
+      <Tracks />
       <Timeline />
-      <GeneralGuidelines />
       <PrizeSection />
+      <GeneralGuidelines />
       <FAQs />
       <Contact />
      

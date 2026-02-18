@@ -79,10 +79,10 @@ const Butterfly = () => {
   // Flight path — butterfly enters, exits, re-enters, creating a looping trajectory
   const curve = useMemo(() => {
     return new THREE.CatmullRomCurve3([
-      new THREE.Vector3(-4 * xFactor, 3 * yFactor, 0),   // Entrance: top-left
-      new THREE.Vector3(8 * xFactor, 0 * yFactor, 0),    // Right exit
-      new THREE.Vector3(4 * xFactor, -2 * yFactor, 0),   // Re-entry right
-      new THREE.Vector3(-8 * xFactor, -4 * yFactor, 0),  // Left exit
+      new THREE.Vector3(-5 * xFactor, 5 * yFactor, 0),   // Entrance: top-left
+      new THREE.Vector3(5 * xFactor, 4 * yFactor, 0),    // Right exit
+      new THREE.Vector3(10 * xFactor, -2 * yFactor, 0),   // Re-entry right
+      new THREE.Vector3(-18 * xFactor, -4 * yFactor, 0),  // Left exit
       new THREE.Vector3(-4 * xFactor, -6 * yFactor, 0),  // Re-entry left
       new THREE.Vector3(0 * xFactor, -8 * yFactor, 0),   // Finale: centre
     ]);
