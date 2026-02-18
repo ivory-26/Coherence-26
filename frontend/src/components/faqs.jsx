@@ -6,30 +6,35 @@ const FAQs = () => {
 
   const faqs = [
     {
-      question: "How do I register for the hackathon?",
-      answer: "You can register by visiting our registration page and following the instructions."
+      question: "Who can participate in Coherence ’26?",
+      answer: "The hackathon is open to full-time undergraduate engineering students.",
     },
     {
-      question: "What is the allowed Team size?",
-      answer: "2-4 Members in a single team",
+      question: "What is the team size requirement?",
+      answer: "Each team must have a minimum of 2 and a maximum of 4 members.",
     },
     {
-      question: "What is the registration cost?",
-      answer: "Only ₹500 per team.",
+      question: "Is there a registration fee?",
+      answer: "The Initial Judging Round is free. Shortlisted teams must pay ₹600 per team for the Grand Finale.",
     },
     {
-      question: "When will the problem statements be released?",
-      answer: "All the problem statements will be released a day before the event.",
+      question: "When is the PPT submission deadline?",
+      answer: "PPT submissions must be completed before 28th February 2026, 11:59 PM.",
     },
     {
-      question: "Are travel expenses included too?",
-      answer: "No, the participants are responsible for covering their travel expenses.",
+      question: "When will final problem statements be announced?",
+      answer: "Final tracks and problem statements will be revealed on the day of the 24-hour offline hackathon.",
     },
     {
-      question: "Can I participate as an individual or do I need a team?",
-      answer: "Team participation is required. Individual participation is not allowed.",
+      question: "What needs to be submitted at the end?",
+      answer: "Teams must submit their GitHub repository link, properly documented source code, demo video, and PPT presentation.",
+    },
+    {
+      question: "Are travel and accommodation covered?",
+      answer: "Participants are responsible for managing their own travel and related expenses.",
     },
   ];
+
 
   const toggleFAQ = (index) => {
     setActiveIndex(activeIndex === index ? null : index);

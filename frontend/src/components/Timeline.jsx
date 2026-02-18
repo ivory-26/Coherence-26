@@ -41,14 +41,14 @@ const timelineData = [
   },
   {
     id: 6,
-    date: 'March 9, 2026 - 12.30 PM',
+    date: 'March 7, 2026 - 12.30 PM',
     title: 'Final Round',
     description: 'Teams submit their final projects for judging. Creativity and functionality are evaluated.',
     icon: Calendar,
   },
   {
     id: 7,
-    date: 'March 10, 2026',
+    date: 'March 7, 2026',
     title: 'Results & Awards',
     description: 'Winners are announced! Celebrate the top projects and innovative solutions.',
     icon: Trophy,

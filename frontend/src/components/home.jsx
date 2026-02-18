@@ -306,36 +306,49 @@ const Home = () => {
             ))}
           </motion.div>
 
-          {/* Register Now Button */}
-          <motion.button
-            onClick={() => window.location.href = "/register"}
-            className="mt-2 px-8 py-4 rounded-xl font-semibold text-white relative overflow-hidden group cursor-pointer"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8 }}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.98 }}
-            style={{
-              background: "linear-gradient(135deg, rgba(139,92,246,0.8) 0%, rgba(99,102,241,0.8) 50%, rgba(59,130,246,0.8) 100%)",
-              boxShadow: "0 0 30px rgba(139,92,246,0.4), inset 0 0 20px rgba(255,255,255,0.1)",
-            }}
-          >
-            <span className="relative z-10">Register Now !</span>
-            <motion.div
-              className="absolute inset-0 opacity-0 group-hover:opacity-100"
-              style={{
-                background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)",
-              }}
-              animate={{
-                x: ["-100%", "100%"],
-              }}
-              transition={{
-                duration: 1.5,
-                repeat: Infinity,
-                repeatDelay: 0.5,
-              }}
-            />
-          </motion.button>
+{/* Register Now Button */}
+<motion.a
+  href="https://unstop.com/hackathons/coherence-26-vidyavardhinis-college-of-engineering-and-technology-maharashtra-1641297/amp"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="mt-2 px-8 py-4 rounded-xl font-semibold text-white relative overflow-hidden group cursor-pointer inline-flex items-center gap-2"
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ delay: 0.8 }}
+  whileHover={{ scale: 1.05 }}
+  whileTap={{ scale: 0.98 }}
+  style={{
+    background: "linear-gradient(135deg, rgba(139,92,246,0.8) 0%, rgba(99,102,241,0.8) 50%, rgba(59,130,246,0.8) 100%)",
+    boxShadow: "0 0 30px rgba(139,92,246,0.4), inset 0 0 20px rgba(255,255,255,0.1)",
+  }}
+>
+  <span className="relative z-10 flex items-center gap-2">
+    Register Now
+    <motion.span
+      initial={{ x: 0 }}
+      whileHover={{ x: 4 }}
+      transition={{ type: "spring", stiffness: 300 }}
+    >
+      →
+    </motion.span>
+  </span>
+
+  <motion.div
+    className="absolute inset-0 opacity-0 group-hover:opacity-100"
+    style={{
+      background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)",
+    }}
+    animate={{
+      x: ["-100%", "100%"],
+    }}
+    transition={{
+      duration: 1.5,
+      repeat: Infinity,
+      repeatDelay: 0.5,
+    }}
+  />
+</motion.a>
+
         </motion.div>
       </div>
 
