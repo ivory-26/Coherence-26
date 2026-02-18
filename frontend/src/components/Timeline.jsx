@@ -82,7 +82,7 @@ const TimelineRow = ({ data, index }) => {
   });
 
   return (
-    <div ref={rowRef} className="timeline-section">
+    <div ref={rowRef} className="timeline-section" id='schedule'>
       <div className={`timeline-row ${isEven ? 'timeline-row--even' : 'timeline-row--odd'}`}>
         <div className="timeline-spacer" />
         <div className="timeline-node-col">

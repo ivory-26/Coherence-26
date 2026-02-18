@@ -146,7 +146,7 @@ const Home = () => {
                 >
                   Schedule
                 </motion.a>
-                <motion.a
+                {/* <motion.a
                   href="/shortlisted-teams"
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -154,7 +154,7 @@ const Home = () => {
                   className="text-left px-4 py-3 rounded-lg text-purple-200/70 hover:text-white hover:bg-purple-500/20 capitalize transition-all duration-300 border border-transparent hover:border-purple-500/30"
                 >
                   Shortlisted Teams
-                </motion.a>
+                </motion.a> */}
                 <motion.a
                   href="#faqs"
                   initial={{ opacity: 0, x: -20 }}
