@@ -13,7 +13,7 @@ const timelineData = [
   },
   {
     id: 2,
-    date: 'February 25, 2026',
+    date: 'February 28, 2026',
     title: 'Team Shortlisting',
     description: 'Selected teams are notified. Prepare for mentoring and idea finalization.',
     icon: Users,

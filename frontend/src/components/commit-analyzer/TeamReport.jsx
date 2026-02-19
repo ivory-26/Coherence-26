@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -12,6 +12,7 @@ import {
   faFolderOpen,
   faTachometerAlt,
   faStar,
+  faPrint,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   BarChart,
@@ -47,6 +48,11 @@ const TeamReport = () => {
   const [loading, setLoading] = useState(true);
   const [aiLoading, setAiLoading] = useState(false);
   const [error, setError] = useState(null);
+  const reportRef = useRef(null);
+
+  const handlePrint = () => {
+    window.print();
+  };
 
   useEffect(() => {
     fetchAnalytics();
@@ -200,26 +206,254 @@ const TeamReport = () => {
   };
 
   return (
-    <div className="relative z-10 p-6 md:p-10 max-w-7xl mx-auto text-white">
-      <Link
-        to="/commit-analyzer"
-        className="inline-flex items-center gap-2 text-purple-300 hover:text-white mb-8 transition-colors"
-      >
-        <FontAwesomeIcon icon={faArrowLeft} /> Back to Dashboard
-      </Link>
+    <>
+      {/* Print Styles */}
+      <style>{`
+        @media print {
+          /* ===== Page Setup ===== */
+          @page {
+            size: A4;
+            margin: 15mm 12mm 20mm 12mm;
+          }
 
-      {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-4">
-        <div>
-          <h1 className="text-3xl font-bold mb-2">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
-              {analytics.team_name}
-            </span>{" "}
-            Report
-          </h1>
-        </div>
+          /* Global Resets: Break out of any screen-height containers */
+          html, body, #root, main, div {
+            height: auto !important;
+            min-height: 0 !important;
+            overflow: visible !important;
+          }
+          
+          /* Hide everything first */
+          body * {
+            visibility: hidden;
+          }
 
-        <div className="flex gap-4 flex-wrap">
+          /* Show the report and its children */
+          .team-report-printable,
+          .team-report-printable * {
+            visibility: visible;
+          }
+          
+          /* Position the report at the very top */
+          .team-report-printable {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: auto !important;
+            margin: 0;
+            padding: 0;
+            background: #ffffff !important;
+            color: #1e293b !important;
+            font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            z-index: 9999;
+          }
+
+          /* Hide interactive / web-only elements */
+          .no-print,
+          .team-report-printable .commit-view-link {
+            display: none !important;
+          }
+
+          /* ===== Typography ===== */
+          .team-report-printable h1 {
+            color: #1e293b !important;
+            font-size: 26pt !important;
+            font-weight: 800 !important;
+            letter-spacing: -0.5px;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+          }
+          .team-report-printable h3 {
+            color: #334155 !important;
+            font-size: 13pt !important;
+            font-weight: 700 !important;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 8px;
+            margin-bottom: 16px !important;
+          }
+          .team-report-printable p,
+          .team-report-printable span,
+          .team-report-printable div {
+            color: #334155 !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+          }
+
+          /* ===== Report Header Accent ===== */
+          .print-header-section {
+            border-top: 4px solid #6366f1 !important;
+            padding-top: 12px !important;
+            margin-bottom: 24px !important;
+          }
+          .print-header-section h1 span {
+            color: #6366f1 !important;
+            -webkit-text-fill-color: #6366f1 !important;
+            background: none !important;
+          }
+
+          /* ===== Stats Row ===== */
+          .print-stats-row {
+            display: flex !important;
+            gap: 0 !important;
+            background: #f8fafc !important;
+            border: 1.5px solid #e2e8f0 !important;
+            border-radius: 8px !important;
+            padding: 12px 16px !important;
+            margin-bottom: 24px !important;
+          }
+          .print-stats-row > div {
+            border-color: #cbd5e1 !important;
+          }
+          .print-stats-row .text-2xl {
+            font-size: 16pt !important;
+            font-weight: 800 !important;
+          }
+          /* Preserve stat accent colors */
+          .print-stats-row .text-green-400 { color: #16a34a !important; }
+          .print-stats-row .text-red-400   { color: #dc2626 !important; }
+          .print-stats-row .text-blue-400  { color: #2563eb !important; }
+          .print-stats-row .text-yellow-400 { color: #ca8a04 !important; }
+          .print-stats-row .text-green-300,
+          .print-stats-row .text-red-300,
+          .print-stats-row .text-blue-300,
+          .print-stats-row .text-yellow-300,
+          .print-stats-row .text-purple-300 { color: #64748b !important; }
+
+          /* ===== Card Sections ===== */
+          .team-report-printable .print-card {
+            background: #ffffff !important;
+            border: 1.5px solid #e2e8f0 !important;
+            border-radius: 8px !important;
+            box-shadow: none !important;
+            padding: 16px !important;
+            margin-bottom: 16px !important;
+          }
+
+          /* ===== AI Review ===== */
+          .team-report-printable .print-ai-review {
+            background: #faf5ff !important;
+            border: 1.5px solid #d8b4fe !important;
+            border-left: 4px solid #a855f7 !important;
+            border-radius: 8px !important;
+            page-break-inside: avoid;
+          }
+          .team-report-printable .print-ai-review .prose p {
+            color: #374151 !important;
+            font-size: 10pt !important;
+            line-height: 1.7 !important;
+          }
+
+          /* ===== Contributors Grid ===== */
+          .team-report-printable .print-contributor-card {
+            background: #f8fafc !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 6px !important;
+          }
+          .team-report-printable .print-contributor-card .bg-gradient-to-br {
+            background: #6366f1 !important;
+            color: white !important;
+          }
+          .team-report-printable .print-contributor-card .bg-gradient-to-br * {
+            color: white !important;
+          }
+
+          /* ===== Charts ===== */
+          .recharts-wrapper,
+          .recharts-surface {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+          }
+          .recharts-cartesian-grid-horizontal line,
+          .recharts-cartesian-grid-vertical line {
+            stroke: #e2e8f0 !important;
+          }
+          .recharts-text {
+            fill: #475569 !important;
+          }
+
+          /* ===== Commit List ===== */
+          .team-report-printable .print-commit-item {
+            background: #f8fafc !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 6px !important;
+            page-break-inside: avoid;
+          }
+          /* Score badge colors in print */
+          .team-report-printable .text-green-400  { color: #16a34a !important; }
+          .team-report-printable .text-yellow-400 { color: #ca8a04 !important; }
+          .team-report-printable .text-orange-400 { color: #ea580c !important; }
+          .team-report-printable .text-red-400    { color: #dc2626 !important; }
+          .team-report-printable .text-blue-300   { color: #2563eb !important; }
+          .team-report-printable .text-pink-400   { color: #db2777 !important; }
+          .team-report-printable .text-blue-400   { color: #2563eb !important; }
+          .team-report-printable .text-purple-400,
+          .team-report-printable .text-purple-300 { color: #7c3aed !important; }
+          .team-report-printable .text-orange-400 { color: #ea580c !important; }
+
+          /* Score badge backgrounds */
+          .team-report-printable .bg-green-500\\/20  { background: #dcfce7 !important; border-color: #86efac !important; }
+          .team-report-printable .bg-yellow-500\\/20 { background: #fef9c3 !important; border-color: #fde047 !important; }
+          .team-report-printable .bg-orange-500\\/20 { background: #ffedd5 !important; border-color: #fdba74 !important; }
+          .team-report-printable .bg-red-500\\/20    { background: #fee2e2 !important; border-color: #fca5a5 !important; }
+
+          /* ===== Page Breaks ===== */
+          .team-report-printable .grid {
+            break-inside: avoid;
+          }
+          .team-report-printable .print-card {
+            break-inside: avoid;
+          }
+          .team-report-printable .print-section-break {
+            break-before: page;
+          }
+
+          /* ===== Footer ===== */
+          .print-footer {
+            display: block !important;
+            margin-top: 32px;
+            padding-top: 12px;
+            border-top: 1px solid #cbd5e1;
+            text-align: center;
+            font-size: 8pt;
+            color: #94a3b8 !important;
+          }
+
+          /* ===== Pie Chart Legend ===== */
+          .team-report-printable .print-legend-dot {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+          }
+        }
+      `}</style>
+
+      <div className="relative z-10 p-6 md:p-10 max-w-7xl mx-auto text-white team-report-printable" ref={reportRef}>
+        <Link
+          to="/commit-analyzer"
+          className="inline-flex items-center gap-2 text-purple-300 hover:text-white mb-8 transition-colors no-print"
+        >
+          <FontAwesomeIcon icon={faArrowLeft} /> Back to Dashboard
+        </Link>
+
+        {/* Header */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-4 print-header-section">
+          <div>
+            <h1 className="text-3xl font-bold mb-2">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
+                {analytics.team_name}
+              </span>{" "}
+              Report
+            </h1>
+            <button
+              onClick={handlePrint}
+              className="no-print mt-2 inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-lg text-sm font-medium hover:opacity-90 transition-all shadow-lg shadow-purple-900/20"
+            >
+              <FontAwesomeIcon icon={faPrint} />
+              Print Report
+            </button>
+          </div>
+
+        <div className="flex gap-4 flex-wrap print-stats-row">
           <div className="text-right">
             <p className="text-xs text-purple-300 uppercase tracking-widest">
               Total Commits
@@ -265,7 +499,7 @@ const TeamReport = () => {
 
       {/* AI Review Section */}
       <div
-        className={`mb-10 rounded-2xl p-8 border backdrop-blur-md transition-all ${
+        className={`mb-10 rounded-2xl p-8 border backdrop-blur-md transition-all print-ai-review ${
           analytics.final_review
             ? "bg-purple-900/10 border-purple-500/30"
             : "bg-white/5 border-white/10"
@@ -307,7 +541,7 @@ const TeamReport = () => {
 
       {/* Top Contributors */}
       {topContributors.length > 0 && (
-        <div className="mb-10 bg-slate-900/50 border border-white/10 rounded-2xl p-6">
+        <div className="mb-10 bg-slate-900/50 border border-white/10 rounded-2xl p-6 print-card">
           <h3 className="text-lg font-semibold mb-6 flex items-center gap-2">
             <FontAwesomeIcon icon={faUsers} className="text-yellow-400" />
             Top Contributors
@@ -316,7 +550,7 @@ const TeamReport = () => {
             {topContributors.map((contributor, i) => (
               <div
                 key={i}
-                className="flex items-center gap-3 p-4 rounded-xl bg-white/5 border border-white/5 hover:border-yellow-500/30 transition-colors"
+                className="flex items-center gap-3 p-4 rounded-xl bg-white/5 border border-white/5 hover:border-yellow-500/30 transition-colors print-contributor-card"
               >
                 <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-sm font-bold">
                   {contributor.name.charAt(0).toUpperCase()}
@@ -337,9 +571,9 @@ const TeamReport = () => {
       )}
 
       {/* Charts Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10 print-section-break">
         {/* Hourly Activity */}
-        <div className="bg-slate-900/50 border border-white/10 rounded-2xl p-6">
+        <div className="bg-slate-900/50 border border-white/10 rounded-2xl p-6 print-card">
           <h3 className="text-lg font-semibold mb-6 flex items-center gap-2">
             <FontAwesomeIcon icon={faChartBar} className="text-blue-400" />
             Hourly Commit Activity
@@ -384,8 +618,7 @@ const TeamReport = () => {
           </div>
         </div>
 
-        {/* File Types */}
-        <div className="bg-slate-900/50 border border-white/10 rounded-2xl p-6">
+        <div className="bg-slate-900/50 border border-white/10 rounded-2xl p-6 print-card">
           <h3 className="text-lg font-semibold mb-6 flex items-center gap-2">
             <FontAwesomeIcon icon={faFileCode} className="text-green-400" />
             File Type Distribution
@@ -429,7 +662,7 @@ const TeamReport = () => {
             {fileTypeData.map((entry, index) => (
               <div key={index} className="flex items-center gap-2">
                 <span
-                  className="w-3 h-3 rounded-full"
+                  className="w-3 h-3 rounded-full print-legend-dot"
                   style={{
                     backgroundColor: COLORS[index % COLORS.length],
                   }}
@@ -440,8 +673,7 @@ const TeamReport = () => {
           </div>
         </div>
 
-        {/* Top Files */}
-        <div className="bg-slate-900/50 border border-white/10 rounded-2xl p-6">
+        <div className="bg-slate-900/50 border border-white/10 rounded-2xl p-6 print-card">
           <h3 className="text-lg font-semibold mb-6 flex items-center gap-2">
             <FontAwesomeIcon icon={faFileCode} className="text-pink-400" />
             Top Modified Files
@@ -490,8 +722,7 @@ const TeamReport = () => {
           </div>
         </div>
 
-        {/* Top Folders */}
-        <div className="bg-slate-900/50 border border-white/10 rounded-2xl p-6">
+        <div className="bg-slate-900/50 border border-white/10 rounded-2xl p-6 print-card">
           <h3 className="text-lg font-semibold mb-6 flex items-center gap-2">
             <FontAwesomeIcon
               icon={faFolderOpen}
@@ -545,7 +776,7 @@ const TeamReport = () => {
       </div>
 
       {/* Recent Commits List */}
-      <div className="bg-slate-900/50 border border-white/10 rounded-2xl p-6">
+      <div className="bg-slate-900/50 border border-white/10 rounded-2xl p-6 print-card print-section-break">
         <h3 className="text-lg font-semibold mb-6 flex items-center gap-2">
           <FontAwesomeIcon icon={faCode} className="text-pink-400" />
           Recent Commits
@@ -555,7 +786,7 @@ const TeamReport = () => {
             recentCommits.map((commit, i) => (
               <div
                 key={i}
-                className="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 hover:border-purple-500/30 transition-colors"
+                className="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 hover:border-purple-500/30 transition-colors print-commit-item"
               >
                 {/* Score Badge */}
                 <div
@@ -602,7 +833,7 @@ const TeamReport = () => {
                   href={commit.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-xs text-purple-300 transition-colors whitespace-nowrap"
+                  className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-xs text-purple-300 transition-colors whitespace-nowrap commit-view-link"
                 >
                   View
                 </a>
@@ -615,7 +846,13 @@ const TeamReport = () => {
           )}
         </div>
       </div>
-    </div>
+
+      {/* Print-only footer */}
+      <div className="print-footer hidden">
+        Report generated on {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })} • Coherence Commit Analyzer
+      </div>
+      </div>
+    </>
   );
 };
 
