@@ -104,7 +104,7 @@ const PrizeSection = () => {
           whileInView={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.5 }}
           viewport={{ once: true }}
-          className="text-right text-white text-sm mr-4 md:mr-10"
+          className="text-center text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-purple-400 to-blue-400 font-bold text-lg md:text-xl drop-shadow-[0_0_20px_rgba(168,85,247,0.4)]"
         >
           *Prizes are for each track
         </motion.p>
@@ -152,7 +152,7 @@ const PrizeCard = ({ prize, index }) => {
 
       <div className="relative z-10 flex flex-col items-center justify-center px-6 py-8">
         <motion.div
-          className={`block mb-6 ${isLarge ? "w-32 h-32" : "w-28 h-28"}`}
+          className={`block mb-6 ${isLarge ? "w-48 h-48" : "w-40 h-40"}`}
           whileHover={{ scale: 1.1, rotate: [0, -8, 8, 0] }}
           transition={{ duration: 0.5 }}
         >
@@ -180,7 +180,7 @@ const PrizeCard = ({ prize, index }) => {
 
         <p
           className={`font-extrabold mb-3 text-transparent bg-clip-text ${
-            isLarge ? "text-3xl md:text-4xl" : "text-2xl md:text-3xl"
+            isLarge ? "text-5xl md:text-6xl" : "text-4xl md:text-5xl"
           }`}
           style={{
             backgroundImage: `linear-gradient(135deg, ${prize.accentFrom}, ${prize.accentTo})`,
