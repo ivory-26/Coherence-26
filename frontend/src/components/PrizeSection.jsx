@@ -1,30 +1,29 @@
 import React from "react";
 import { motion } from "framer-motion";
-import firstPriceImage from "../assets/firstPrice.png";
-import secondPriceImage from "../assets/secondPrice.png";
+import { Code, Brain, Blocks } from "lucide-react";
 
-const prizes = [
+const trackPrizes = [
   {
-    rank: "Winner",
-    image: firstPriceImage,
-    amount: "₹ 15,000",
-    perks: "Certificate + Internship Opportunity + Goodies",
-    accentFrom: "rgba(250,204,21,0.8)",
-    accentTo: "rgba(234,179,8,0.5)",
-    glowColor: "rgba(250,204,21,0.3)",
-    size: "large",
+    title: "Smart Governance & Public Platforms",
+    winner: "₹ 15,000",
+    runnerUp: "₹ 7,500",
+    Icon: Code,
   },
   {
-    rank: "1st Runner-up",
-    image: secondPriceImage,
-    amount: "₹ 7,500",
-    perks: "Certificate + Internship Opportunity + Goodies",
-    accentFrom: "rgba(167,139,250,0.8)",
-    accentTo: "rgba(99,102,241,0.5)",
-    glowColor: "rgba(167,139,250,0.3)",
-    size: "medium",
+    title: "HealthTech & Digital Wellbeing",
+    winner: "₹ 15,000",
+    runnerUp: "₹ 7,500",
+    Icon: Brain,
+  },
+  {
+    title: "Student Centric Technology",
+    winner: "₹ 15,000",
+    runnerUp: "₹ 7,500",
+    Icon: Blocks,
   },
 ];
+
+const sharedPrizeGlow = "rgba(168,85,247,0.24)";
 
 const PrizeSection = () => {
   return (
@@ -91,10 +90,22 @@ const PrizeSection = () => {
           </div>
         </motion.div>
 
-        {/* Prize Cards */}
-        <div className="flex flex-col md:flex-row justify-center items-end gap-8 md:gap-10 mb-10">
-          {prizes.map((prize, index) => (
-            <PrizeCard key={index} prize={prize} index={index} />
+        {/* Track-wise Prize Highlights */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          viewport={{ once: true }}
+          className="text-center mt-10 mb-8"
+        >
+          <p className="text-sm uppercase tracking-[0.25em] text-purple-300/70">
+            Track-wise Prizes
+          </p>
+        </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+          {trackPrizes.map((prize, index) => (
+            <TrackPrizeCard key={index} prize={prize} index={index} />
           ))}
         </div>
 
@@ -106,7 +117,7 @@ const PrizeSection = () => {
           viewport={{ once: true }}
           className="text-right text-white text-sm mr-4 md:mr-10"
         >
-          *Prizes are for each track
+          *Each track awards Winner and 1st Runner-up prizes
         </motion.p>
 
         {/* Bottom tagline */}
@@ -126,8 +137,8 @@ const PrizeSection = () => {
   );
 };
 
-const PrizeCard = ({ prize, index }) => {
-  const isLarge = prize.size === "large";
+const TrackPrizeCard = ({ prize, index }) => {
+  const Icon = prize.Icon;
 
   return (
     <motion.div
@@ -140,59 +151,48 @@ const PrizeCard = ({ prize, index }) => {
         type: "spring",
         stiffness: 60,
       }}
-      whileHover={{ scale: 1.05, y: -10 }}
-      className="group relative w-full md:w-auto text-center"
+      whileHover={{ scale: 1.03, y: -8 }}
+      className="group relative w-full text-center"
     >
       <div
         className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-40 rounded-full blur-[60px] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
         style={{
-          background: `radial-gradient(circle, ${prize.glowColor}, transparent 70%)`,
+          background: `radial-gradient(circle, ${sharedPrizeGlow}, transparent 70%)`,
         }}
       />
 
       <div className="relative z-10 flex flex-col items-center justify-center px-6 py-8">
         <motion.div
-          className={`block mb-6 ${isLarge ? "w-32 h-32" : "w-28 h-28"}`}
-          whileHover={{ scale: 1.1, rotate: [0, -8, 8, 0] }}
-          transition={{ duration: 0.5 }}
+          className="mb-5 p-4 rounded-2xl border border-white/10 bg-white/5"
+          whileHover={{ scale: 1.05, rotate: [0, -5, 5, 0] }}
+          transition={{ duration: 0.4 }}
         >
-          <img
-            src={prize.image}
-            alt={prize.rank}
-            className="w-full h-full object-contain drop-shadow-[0_0_20px_rgba(139,92,246,0.4)]"
-          />
+          <Icon size={34} className="text-white" strokeWidth={1.8} />
         </motion.div>
 
         <h3
-          className={`font-bold text-white mb-3 ${
-            isLarge ? "text-2xl md:text-3xl" : "text-xl md:text-2xl"
-          }`}
+          className="font-bold text-white mb-3 text-lg md:text-xl min-h-[56px] flex items-center text-center"
         >
-          {prize.rank}
+          {prize.title}
         </h3>
 
-        <div
-          className="h-0.5 w-12 mb-4 rounded-full"
-          style={{
-            background: `linear-gradient(90deg, ${prize.accentFrom}, ${prize.accentTo})`,
-          }}
-        />
+        <div className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 mb-2">
+          <p className="text-[11px] uppercase tracking-[0.2em] text-purple-200/70 mb-1">
+            Winner
+          </p>
+          <p className="font-extrabold text-2xl text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-purple-400 to-blue-400 drop-shadow-[0_0_20px_rgba(168,85,247,0.4)]">
+            {prize.winner}
+          </p>
+        </div>
 
-        <p
-          className={`font-extrabold mb-3 text-transparent bg-clip-text ${
-            isLarge ? "text-3xl md:text-4xl" : "text-2xl md:text-3xl"
-          }`}
-          style={{
-            backgroundImage: `linear-gradient(135deg, ${prize.accentFrom}, ${prize.accentTo})`,
-            filter: `drop-shadow(0 0 15px ${prize.glowColor})`,
-          }}
-        >
-          {prize.amount}
-        </p>
-
-        <p className="text-purple-200/60 text-sm leading-relaxed text-center max-w-xs">
-          {prize.perks}
-        </p>
+        <div className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3">
+          <p className="text-[11px] uppercase tracking-[0.2em] text-purple-200/70 mb-1">
+            1st Runner-up
+          </p>
+          <p className="font-bold text-xl text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-purple-400 to-blue-400 drop-shadow-[0_0_20px_rgba(168,85,247,0.4)]">
+            {prize.runnerUp}
+          </p>
+        </div>
       </div>
     </motion.div>
   );
